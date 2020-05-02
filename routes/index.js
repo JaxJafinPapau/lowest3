@@ -26,8 +26,8 @@ router.get('/', function(req, res, next) {
     let uniqueInts = {};
     intArray.forEach(int => {
       // This leverages the nature of objects in JS, which will order and constrain unique keys
-      let parsed = parseInt(int)
-      uniqueInts[`${parsed}`] = parsed
+      let parsed = parseInt(int);
+      uniqueInts[`${parsed}`] = parsed;
     });
     return Object.values(uniqueInts);
   };
