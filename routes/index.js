@@ -8,10 +8,10 @@ router.get('/', function(req, res, next) {
   let targetIntegers;
   const externalRequest = https.request(dataLocation, externalResponse => {
     externalResponse.on('data', responseBuffer => {
-      let responseJson = responseBuffer.toJSON()
-      let rawIntegers = responseJson.data
+      let responseJson = Buffer.from(responseBuffer)
+      let rawIntegers = responseJson.toString('utf-8').split("\n")
       let orderedIntegers = sortAndUniqify(rawIntegers)
-      let firstThree = `${orderedIntegers[0]}, ${orderedIntegers[1]}, and ${orderedIntegers[2]}`
+      let firstThree = [orderedIntegers[0], orderedIntegers[1], orderedIntegers[2]]
       res.render('index', { targetIntegers: firstThree, dataLocation: dataLocation });
     });
   });
@@ -26,7 +26,8 @@ router.get('/', function(req, res, next) {
     let uniqueInts = {}
     intArray.forEach(int => {
       // This leverages the nature of objects in JS, which will order and constrain unique keys
-      uniqueInts[`${int}`] = int
+      let parsed = parseInt(int)
+      uniqueInts[`${parsed}`] = parsed
     })
     return Object.values(uniqueInts)
   }
